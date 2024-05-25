@@ -1,17 +1,23 @@
 const express = require("express");
 const redis = require("redis");
 
+const TasksController = require("./controllers/tasks.controller");
+
 const app = express();
-const client = redis.createClient();
+app.use(express.json());
 
-client.on("error", (err) => {
-	console.log("Error connecting to redis ", err);
-});
-
+const { createTask, getTask, getTasks, deleteTask, updateTask } =
+	TasksController();
 
 app.get("/", (request, response) => {
 	response.send("<h1>Hello World!</h1>");
 });
+
+app.get("/tasks/:id", getTask);
+app.post("/tasks", createTask);
+app.get("/tasks", getTasks);
+app.delete("/tasks/:id", deleteTask);
+app.put("/tasks/:id", updateTask);
 
 const PORT = 3000;
 app.listen(PORT, () => {
