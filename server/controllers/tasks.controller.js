@@ -16,7 +16,6 @@ const TasksController = () => {
 					return todo;
 				})
 			);
-			console.log(todosKeys);
 			client.disconnect();
 
 			return res
@@ -71,7 +70,7 @@ const TasksController = () => {
 				id: id,
 				title: body.title,
 				description: body.description || "",
-				status: body.status,
+				status: body.status || "pending",
 				dueDate: body.dueDate,
 			};
 
@@ -84,8 +83,10 @@ const TasksController = () => {
 			return res.status(200).json({
 				response: "success",
 				message: "Task has been created",
+				task: task,
 			});
 		} catch (error) {
+			console.error(error);
 			return res
 				.status(500)
 				.json({ response: "failure", message: "Internal sever error" });
@@ -99,25 +100,31 @@ const TasksController = () => {
 			const id = req.params.id;
 
 			const key = `todo:${id}`;
-            const body = req.body;
+			const body = req.body;
 
-            // Getting all the tasks keys
+			// Getting all the tasks keys
 			const todosKeys = await client.lRange("todos", 0, -1);
-            if (todosKeys.length === 0) {
-                return res.status(400).json({response: "failure", message: "tasks do not exist"});
-            }
+			if (todosKeys.length === 0) {
+				return res.status(400).json({
+					response: "failure",
+					message: "tasks do not exist",
+				});
+			}
 
-            // Checking if a key exits or not
-            const keyExits = await client.exists(key);
-            if (keyExits === 0) {
-                return res.status(400).json({response: "failure", message: "task does not exist"});
-            }
+			// Checking if a key exits or not
+			const keyExits = await client.exists(key);
+			if (keyExits === 0) {
+				return res.status(400).json({
+					response: "failure",
+					message: "task does not exist",
+				});
+			}
 
 			const task = {
 				id: id,
 				title: body.title,
 				description: body.description || "",
-				status: body.status,
+				status: body.status || "pending",
 				dueDate: body.dueDate,
 			};
 
@@ -127,6 +134,7 @@ const TasksController = () => {
 			return res.status(200).json({
 				response: "success",
 				message: "Task has been updated",
+				task: task,
 			});
 		} catch (error) {
 			console.error(error);

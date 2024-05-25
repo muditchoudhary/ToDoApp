@@ -1,10 +1,12 @@
 const express = require("express");
+const cors = require("cors");
 const redis = require("redis");
 
 const TasksController = require("./controllers/tasks.controller");
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const { createTask, getTask, getTasks, deleteTask, updateTask } =
 	TasksController();
