@@ -99,4 +99,4 @@ Optionally, you can install Redis Commander to view the Redis database in a GUI 
 - Copy the given URL and paste it into your browser.
 
 # Demo Video
-[![Watch the demo video](./client/public/demo-img.png)](./client/public/demo-video.mp4)
+[![Watch the demo video](./client/public/demo-img.png)](https://vimeo.com/950424635?share=copy)
